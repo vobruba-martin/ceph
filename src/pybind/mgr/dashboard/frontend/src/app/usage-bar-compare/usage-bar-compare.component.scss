@@ -1,0 +1,80 @@
+.compare {
+  padding: 1rem 1.5rem;
+
+  h1 {
+    margin: 0;
+  }
+
+  h2 {
+    margin-bottom: 0.25rem;
+  }
+
+  td {
+    padding-bottom: 0.375rem;
+    padding-top: 0.375rem;
+    vertical-align: middle;
+  }
+
+  td:first-child {
+    white-space: nowrap;
+  }
+}
+
+// Sections side by side; they wrap below each other on narrow screens.
+.compare__grid {
+  align-items: start;
+  display: grid;
+  gap: 1rem 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(54rem, 1fr));
+}
+
+// Mini table emulating the Usage column and the next column of the OSD list.
+.compare__columns {
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  .compare & td {
+    border: 1px dashed var(--cds-border-strong-01, #8d8d8d);
+    height: 3rem;
+    padding: 0;
+    vertical-align: middle;
+  }
+
+  .compare & td.compare__neighbor {
+    padding: 0 0.5rem;
+  }
+}
+
+.compare__neighbor {
+  // Tinted, so that whatever overflows from the usage column stands out.
+  background-color: var(--cds-highlight, #e5f6ff);
+  white-space: nowrap;
+  width: 4.5rem;
+}
+
+.compare__header {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.compare__column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+// Room above the bars for the open tooltips; hovering must not close them.
+.compare .compare__open-tooltip {
+  height: 8.5rem;
+  padding-bottom: 0.75rem;
+  vertical-align: bottom;
+
+  cd-legacy-usage-bar-open-tooltip,
+  cd-usage-bar-open-tooltip {
+    pointer-events: none;
+  }
+}

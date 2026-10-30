@@ -40,6 +40,8 @@ import { NfsFormComponent } from './ceph/nfs/nfs-form/nfs-form.component';
 import { PerformanceCounterComponent } from './ceph/performance-counter/performance-counter/performance-counter.component';
 import { LoginPasswordFormComponent } from './core/auth/login-password-form/login-password-form.component';
 import { LoginComponent } from './core/auth/login/login.component';
+import { UsageBarCompareComponent } from './usage-bar-compare/usage-bar-compare.component';
+import { UsageBarBenchComponent } from './usage-bar-compare/bench/usage-bar-bench.component';
 import { UserPasswordFormComponent } from './core/auth/user-password-form/user-password-form.component';
 import { ErrorComponent } from './core/error/error.component';
 import { BlankLayoutComponent } from './core/layouts/blank-layout/blank-layout.component';
@@ -115,6 +117,9 @@ const routes: Routes = [
   // Overview
   { path: '', redirectTo: 'overview', pathMatch: 'full' },
   { path: 'api-docs', component: ApiDocsComponent },
+  // TEMPORARY - do not merge
+  { path: 'usage-bar-compare', component: UsageBarCompareComponent },
+  { path: 'usage-bar-bench', component: UsageBarBenchComponent },
   {
     path: '',
     component: WorkbenchLayoutComponent,
