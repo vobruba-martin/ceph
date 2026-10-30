@@ -1,0 +1,139 @@
+<div class="compare content-theme">
+  <div class="compare__header">
+    <h1 class="cds--type-heading-03">cd-usage-bar: Carbon meter vs. lightweight</h1>
+  </div>
+  <div class="compare__grid">
+    @for (column of columns; track $index) {
+      <div class="compare__column">
+        @for (section of column; track section.title) {
+          <section>
+            <h2 class="cds--type-heading-02">{{ section.title }}</h2>
+            <!-- Same scroll container as the Carbon table in cd-table: a tooltip
+             drawn inside the table (Carbon) can be clipped by it. -->
+            <div class="cds--data-table-content">
+              <table class="cds--data-table cds--data-table--sm">
+                <thead>
+                  <tr>
+                    @if (section.kind === 'open-tooltips') {
+                      <th>Carbon meter (current)</th>
+                      <th>Lightweight (new)</th>
+                    } @else {
+                      <th>Case</th>
+                      <th>Carbon meter (current)</th>
+                      <th>Lightweight (new)</th>
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (c of section.cases; track c.label) {
+                    <tr [attr.data-case]="c.label">
+                      @if (section.kind === 'open-tooltips') {
+                        <td class="compare__open-tooltip">
+                          <cd-legacy-usage-bar-open-tooltip
+                            [title]="'osd 1'"
+                            [total]="c.total"
+                            [used]="c.used"
+                            [warningThreshold]="c.warningThreshold"
+                            [errorThreshold]="c.errorThreshold"
+                            [width]="c.width || '15rem'"
+                          ></cd-legacy-usage-bar-open-tooltip>
+                        </td>
+                        <td class="compare__open-tooltip">
+                          <cd-usage-bar-open-tooltip
+                            [title]="'osd 1'"
+                            [total]="c.total"
+                            [used]="c.used"
+                            [warningThreshold]="c.warningThreshold"
+                            [errorThreshold]="c.errorThreshold"
+                            [width]="c.width || '15rem'"
+                          ></cd-usage-bar-open-tooltip>
+                        </td>
+                      } @else {
+                        <td>{{ c.label }}</td>
+                        @for (lightweight of [false, true]; track lightweight) {
+                          <td>
+                            @if (c.neighbor) {
+                              <!-- A real table row, so that the cells share the height and an
+                           overflowing bar paints over the next cell as in the OSD list. -->
+                              <table
+                                class="compare__columns"
+                                [style.width]="'calc(' + c.containerWidth + ' + 4.5rem)'"
+                              >
+                                <tr>
+                                  <td
+                                    class="compare__column"
+                                    [style.width]="c.containerWidth"
+                                  >
+                                    <ng-container
+                                      *ngTemplateOutlet="
+                                        barTpl;
+                                        context: { $implicit: c, lightweight: lightweight }
+                                      "
+                                    ></ng-container>
+                                  </td>
+                                  <td class="compare__neighbor">{{ c.neighbor }}</td>
+                                </tr>
+                              </table>
+                            } @else {
+                              <div [style.width]="c.containerWidth || null">
+                                <ng-container
+                                  *ngTemplateOutlet="
+                                    barTpl;
+                                    context: { $implicit: c, lightweight: lightweight }
+                                  "
+                                ></ng-container>
+                              </div>
+                            }
+                          </td>
+                        }
+                      }
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </section>
+        }
+      </div>
+    }
+  </div>
+  <!-- Measurements for headless checks (--dump-dom); not shown. -->
+  <pre
+    id="metrics"
+    hidden
+    >{{ metrics }}</pre>
+</div>
+
+<ng-template
+  #barTpl
+  let-c
+  let-lightweight="lightweight"
+>
+  @if (lightweight) {
+    <cd-usage-bar
+      [title]="'osd 1'"
+      [total]="c.total"
+      [used]="c.used"
+      [warningThreshold]="c.warningThreshold"
+      [errorThreshold]="c.errorThreshold"
+      [enablePercentageLabel]="c.enablePercentageLabel ?? true"
+      [isBinary]="c.isBinary ?? true"
+      [decimals]="c.decimals ?? 2"
+      [width]="c.width || '15rem'"
+      [customLabel]="c.customLabel || ''"
+    ></cd-usage-bar>
+  } @else {
+    <cd-legacy-usage-bar
+      [title]="'osd 1'"
+      [total]="c.total"
+      [used]="c.used"
+      [warningThreshold]="c.warningThreshold"
+      [errorThreshold]="c.errorThreshold"
+      [enablePercentageLabel]="c.enablePercentageLabel ?? true"
+      [isBinary]="c.isBinary ?? true"
+      [decimals]="c.decimals ?? 2"
+      [width]="c.width || '15rem'"
+      [customLabel]="c.customLabel || ''"
+    ></cd-legacy-usage-bar>
+  }
+</ng-template>
